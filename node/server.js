@@ -1,4 +1,5 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 const mysql = require('mysql')
 const path = require('path')
 
@@ -18,6 +19,12 @@ connection.connect( (err)  => {
     console.log('MySQL conectado...')
 })
 
+// Seta a view engine do ejs para o app
+app.set('view engine', 'ejs')
+
+// Insere o middleware body-parser ao express para que possamos pegar parametros nas urls
+app.use(bodyParser.urlencoded({ extended: true }))
+
 // Insere um novo cadastro na tabela people
 app.post('/insert', (req, res) => {
     let post = {
@@ -26,22 +33,17 @@ app.post('/insert', (req, res) => {
     let sql = 'INSERT INTO people SET ?'
     let query = connection.query(sql, post, (err, result) => {
         if(err) throw err
-        res.send("Cadastrado com sucesso")
-    })
-})
-
-// Realiza consulta dos usuarios cadastrados na tabela people
-app.get('/select', (req, res) => {
-    let sql = "SELECT * FROM people"
-    connection.query(sql, (err, result) => {
-        if(err) throw err
-        res.send(result)
+        res.redirect('/')
     })
 })
 
 // Carrega a tela do formulario
-app.get('/', (req,res) => {
-    res.sendFile(path.join(__dirname + '/html/form.html'))
+app.get('/', (req, res) => {
+    let sql = "SELECT * FROM people"
+    connection.query(sql, (err, result) => {
+        if(err) throw err
+        res.render(path.join(__dirname + '/view/index.ejs'), {data: result})
+    })
 })
 
 app.listen(port, ()=> {

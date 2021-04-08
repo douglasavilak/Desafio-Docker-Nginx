@@ -1,0 +1,23 @@
+<h1>Full Cycle!!!</h1>
+
+<form action="/insert" method="POST">
+    <label>Nome:</label>
+    <input type="text" id="name" name="name" placeholder="Nome"><br><br>
+
+    <input type="submit" id="send" value="Cadastrar"><br>
+</form>
+<br>
+<br>
+<% if (data.length > 0) { %>
+    <div>
+        <h2>Usuários Já Cadastrados:</h2>
+        <ul>
+            <% data.forEach(function(usuario) { %>
+                <li><%= usuario.name %></li>
+
+            <% }) %>
+        </ul>
+    </div>
+<% } else { %>
+    <h2>Nenhum usuário cadastrado até o momento =( </h2>
+<% } %>
