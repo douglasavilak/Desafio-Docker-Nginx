@@ -6,6 +6,7 @@ services:
       context: nginx
     image: douglasavilak/nginx:prod
     container_name: nginx
+    restart: always
     tty: true
     ports: 
       - "8080:80"
@@ -17,10 +18,9 @@ services:
       context: node
     image: douglasavilak/node:prod
     container_name: app
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s node server.js
     networks: 
       - server-network
-    volumes:
-      - ./node:/usr/src/app
     tty: true
     ports:
       - 3000:3000
@@ -28,13 +28,15 @@ services:
       - db
 
   db: 
-    image: mysql:5.7
+    build:
+      context: mysql
+    image: douglasavilak/mysql:prod
     command: --innodb-use-native-aio=0
     container_name: db
     restart: always
     tty: true
     volumes:
-      - ./mysql/dbdata:/var/lib/mysql
+      - ./mysql/dbdata/:/var/lib/mysql
     environment: 
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root

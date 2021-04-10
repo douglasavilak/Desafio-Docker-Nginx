@@ -2,9 +2,11 @@ FROM node:15
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY package*.json .
 
 RUN npm install
+
+COPY . .
 
 RUN apt-get update && apt-get install -y wget
 
