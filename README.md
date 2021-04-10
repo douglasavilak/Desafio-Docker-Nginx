@@ -1,5 +1,4 @@
-# desafioDockerNginx
-Desafio Nginx - FullCycle 2.0 / Docker
+#Desafio Nginx - FullCycle 2.0 / Docker
 Este é um projeto de estudo do modulo Docker do curso FullCycle 2.0 da Code Education
 
 Objetivo:
